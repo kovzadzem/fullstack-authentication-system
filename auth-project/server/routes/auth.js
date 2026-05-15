@@ -1,66 +1,74 @@
 const express = require('express');
+const sqlite3 = require('sqlite3').verbose();
+const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const authMiddleware = require('../middleware/auth');
-const router = express.Router();
 
-// 1. რეგისტრაცია (POST /api/register)
-router.post('/register', async (req, res) => {
-    const { username, email, password, confirmPassword } = req.body;
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-    if (!username || !email || !password || !confirmPassword) 
-        return res.status(400).json({ message: 'გთხოვთ შეავსოთ ყველა ველი.' });
+// ქმნის ბაზის ფაილს (database.sqlite)
+const db = new sqlite3.Database('./database.sqlite', (err) => {
+    if (err) console.error('❌ ბაზის შეცდომა:', err.message);
+    else console.log('✅ ლოკალური ბაზა (SQLite) წარმატებით ჩაირთო!');
+});
 
-    if (password !== confirmPassword) 
-        return res.status(400).json({ message: 'პაროლები არ ემთხვევა.' });
+// მომხმარებლების ცხრილის შექმნა
+db.run(`CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT,
+    email TEXT UNIQUE,
+    password TEXT
+)`);
 
-    if (password.length < 6) 
-        return res.status(400).json({ message: 'პაროლი უნდა იყოს მინიმუმ 6 სიმბოლო.' });
-
+// --- რეგისტრაცია (Register) ---
+app.post('/api/register', async (req, res) => {
     try {
-        const userExists = await User.findOne({ email });
-        if (userExists) return res.status(400).json({ message: 'ეს ელ-ფოსტა უკვე რეგისტრირებულია.' });
+        const { username, email, password, confirmPassword } = req.body;
+
+        if (password !== confirmPassword) {
+            return res.status(400).json({ error: "პაროლები არ ემთხვევა!" });
+        }
+        if (password.length < 6) {
+            return res.status(400).json({ error: "პაროლი უნდა იყოს მინ. 6 სიმბოლო!" });
+        }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ username, email, password: hashedPassword });
-        await newUser.save();
 
-        res.status(201).json({ message: 'რეგისტრაცია წარმატებით დასრულდა!' });
+        db.run(`INSERT INTO users (username, email, password) VALUES (?, ?, ?)`, 
+        [username, email, hashedPassword], function(err) {
+            if (err) {
+                return res.status(400).json({ error: "ეს Email უკვე გამოყენებულია!" });
+            }
+            res.status(201).json({ message: "რეგისტრაცია წარმატებით დასრულდა!" });
+        });
     } catch (err) {
-        res.status(500).json({ message: 'სერვერის შეცდომა.' });
+        res.status(500).json({ error: "სერვერის შეცდომა" });
     }
 });
 
-// 2. ავტორიზაცია (POST /api/login)
-router.post('/login', async (req, res) => {
+// --- ავტორიზაცია (Login) ---
+app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
 
-    if (!email || !password)
-        return res.status(400).json({ message: 'გთხოვთ შეავსოთ ყველა ველი.' });
-
-    try {
-        const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ message: 'არასწორი ელ-ფოსტა ან პაროლი.' });
+    db.get(`SELECT * FROM users WHERE email = ?`, [email], async (err, user) => {
+        if (err || !user) {
+            return res.status(400).json({ error: "მომხმარებელი ვერ მოიძებნა!" });
+        }
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ message: 'არასწორი ელ-ფოსტა ან პაროლი.' });
+        if (!isMatch) {
+            return res.status(400).json({ error: "პაროლი არასწორია!" });
+        }
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token, message: 'ავტორიზაცია წარმატებულია.' });
-    } catch (err) {
-        res.status(500).json({ message: 'სერვერის შეცდომა.' });
-    }
+        // JWT ტოკენის შექმნა
+        const token = jwt.sign({ id: user.id }, 'MY_SUPER_SECRET_KEY', { expiresIn: '1h' });
+        res.json({ message: "ავტორიზაცია წარმატებულია!", token });
+    });
 });
 
-// 3. დაცული პროფილი (GET /api/profile)
-router.get('/profile', authMiddleware, async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id).select('-password');
-        res.json(user);
-    } catch (err) {
-        res.status(500).json({ message: 'მონაცემების წამოღება ვერ მოხერხდა.' });
-    }
+const PORT = 5001;
+app.listen(PORT, () => {
+    console.log(`🚀 სერვერი მუშაობს პორტზე: ${PORT}`);
 });
-
-module.exports = router;

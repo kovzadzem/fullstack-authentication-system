@@ -7,16 +7,21 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <button id="themeBtn" class="theme-toggle">🌙</button>
+
     <div class="auth-container">
-        <h2>სისტემაში შესვლა</h2>
-        <p id="message"></p>
         <form id="loginForm">
+            <h2>სისტემაში შესვლა</h2>
+            <p id="message" style="color: #ff4757; font-size: 13px; min-height: 20px;"></p>
+            
             <input type="email" id="email" placeholder="ელ-ფოსტა" required>
             <input type="password" id="password" placeholder="პაროლი" required>
+            
             <button type="submit">შესვლა</button>
+            <p class="switch-text">არ გაქვთ ანგარიში? <a href="register.html">დარეგისტრირდით</a></p>
         </form>
-        <p class="switch-text">არ გაქვთ ანგარიში? <a href="register.html">დარეგისტრირდით</a></p>
     </div>
+
     <script src="auth.js"></script>
 </body>
 </html>

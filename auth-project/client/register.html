@@ -7,18 +7,20 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <button id="themeBtn" class="theme-toggle">🌙</button>
+
     <div class="auth-container">
-        <h2>რეგისტრაცია</h2>
-        <p id="message"></p>
-        <form id="registerForm">
-            <input type="text" id="username" placeholder="მომხმარებლის სახელი" required>
-            <input type="email" id="email" placeholder="ელ-ფოსტა" required>
-            <input type="password" id="password" placeholder="პაროლი (მინ. 6 სიმბოლო)" required>
-            <input type="password" id="confirmPassword" placeholder="გაიმეორეთ პაროლი" required>
+        <form id="regForm">
+            <h2>რეგისტრაცია</h2>
+            <input type="text" id="regUser" placeholder="მომხმარებლის სახელი" required>
+            <input type="email" id="regEmail" placeholder="ელ-ფოსტა" required>
+            <input type="password" id="regPass" placeholder="პაროლი" required>
+            <input type="password" id="regConfirm" placeholder="გაიმეორეთ პაროლი" required>
             <button type="submit">რეგისტრაცია</button>
+            <p class="switch-text">უკვე გაქვთ ანგარიში? <a href="index.html">შედით</a></p>
         </form>
-        <p class="switch-text">უკვე გაქვთ ანგარიში? <a href="index.html">შესვლა</a></p>
     </div>
-    <script src="auth.js"></script>
+
+    <script src="register.js"></script>
 </body>
 </html>

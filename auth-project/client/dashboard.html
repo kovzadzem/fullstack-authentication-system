@@ -3,15 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>მთავარი გვერდი - Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Dashboard - My Account</title>
+    <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
+
+    <nav class="navbar">
+        <div class="nav-logo">MySystem</div>
+        <button id="themeBtn" class="theme-toggle">🌙 რეჟიმი</button>
+    </nav>
+
     <div class="dashboard-container">
-        <h2>მოგესალმებით, <span id="userDisplay">...</span>! 👋</h2>
-        <p>თქვენ წარმატებით გაიარეთ ავტორიზაცია და იმყოფებით დაცულ გვერდზე.</p>
-        <button id="logoutBtn">სისტემიდან გამოსვლა</button>
+        <div class="profile-card">
+            <div class="avatar-circle" id="userInitial">M</div>
+            <h1>გამარჯობა...<span id="user"></span></h1>
+            <p class="email-text"> <span id="mail"></span></p>
+            <button class="btn-logout" id="logoutBtn">გამოსვლა</button>
+        </div>
     </div>
-    <script src="auth.js"></script>
+
+    <script src="dashboard.js"></script>
 </body>
 </html>

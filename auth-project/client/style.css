@@ -1,96 +1,83 @@
+/* ძირითადი სტილები (Light Mode) */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f2f5;
+    background-color: #f4f7f6;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.auth-container, .dashboard-container {
-    background: white;
-    padding: 40px 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    width: 100%;
-    max-width: 380px;
-    box-sizing: border-box;
-}
-
-h2 {
-    margin-top: 0;
-    margin-bottom: 24px;
+form, .dashboard-box {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 350px;
     text-align: center;
-    color: #1a1a1a;
+    transition: background 0.3s, box-shadow 0.3s;
 }
+
+h2, h1 { color: #333; margin-bottom: 25px; }
 
 input {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
-    border: 1px solid #ccd0d5;
-    border-radius: 6px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     box-sizing: border-box;
     font-size: 14px;
-    transition: border-color 0.2s;
-}
-
-input:focus {
-    border-color: #1877f2;
-    outline: none;
 }
 
 button {
     width: 100%;
     padding: 12px;
-    background-color: #1877f2;
+    background-image: linear-gradient(120deg, #4facfe 0%, #00f2fe 100%);
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
     margin-top: 15px;
 }
 
-button:hover {
-    background-color: #166fe5;
+/* 🌙 DARK MODE სტილები - ესენი ამუშავდება როცა body-ს ექნება .dark-mode კლასი */
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #ffffff;
 }
 
-#logoutBtn {
-    background-color: #e4e6eb;
-    color: #050505;
+body.dark-mode form, 
+body.dark-mode .dashboard-box {
+    background: #2d2d2d;
+    color: #ffffff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
 }
 
-#logoutBtn:hover {
-    background-color: #d8dadf;
+body.dark-mode input {
+    background: #3d3d3d;
+    border-color: #555;
+    color: #ffffff;
 }
 
-.switch-text {
-    text-align: center;
-    margin-top: 20px;
+body.dark-mode h1, body.dark-mode h2 {
+    color: #ffffff;
+}
+
+/* თემის გადამრთველი ღილაკი */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: auto;
+    padding: 10px 20px;
+    background: #333;
+    color: white;
+    border-radius: 20px;
     font-size: 14px;
-    color: #65676b;
-}
-
-.switch-text a {
-    color: #1877f2;
-    text-decoration: none;
-}
-
-.switch-text a:hover {
-    text-decoration: underline;
-}
-
-#message {
-    text-align: center;
-    font-weight: bold;
-    font-size: 14px;
-    margin-bottom: 15px;
-    color: #e41e3f; /* შეცდომის ფერი წითელი */
-}
-
-#message.success {
-    color: #2baf2b; /* წარმატების ფერი მწვანე */
+    z-index: 1000;
 }
