@@ -1,57 +1,65 @@
+/* 1. გლობალური ცვლადების განსაზღვრა (CSS Custom Properties) */
+/* :root ნიშნავს, რომ ეს ცვლადები ხელმისაწვდომია მთელი დოკუმენტისთვის */
 :root {
-    --primary: #4facfe;
-    --secondary: #00f2fe;
-    --bg-light: #f0f2f5;
-    --bg-dark: #121212;
-    --card-light: #ffffff;
-    --card-dark: #1e1e1e;
-    --text-light: #333;
-    --text-dark: #f5f5f5;
+    --primary: #4facfe;       /* ძირითადი ლურჯი ფერი */
+    --secondary: #00f2fe;     /* დამხმარე ღია ლურჯი გრადიენტისთვის */
+    --bg-light: #f0f2f5;      /* ღია რეჟიმის ფონი */
+    --bg-dark: #121212;       /* მუქი რეჟიმის ფონი */
+    --card-light: #ffffff;    /* ბარათის ფონი ღია რეჟიმში */
+    --card-dark: #1e1e1e;     /* ბარათის ფონი მუქ რეჟიმში */
+    --text-light: #333;       /* მუქი ტექსტი ღია ფონისთვის */
+    --text-dark: #f5f5f5;     /* ღია ტექსტი მუქი ფონისთვის */
 }
 
+/* 2. საბაზისო სტილები მთლიანი გვერდისთვის */
 body {
     font-family: 'Inter', 'Segoe UI', sans-serif;
-    background-color: var(--bg-light);
-    color: var(--text-light);
+    background-color: var(--bg-light); /* ცვლადის გამოყენება ფონისთვის */
+    color: var(--text-light);          /* ცვლადის გამოყენება ტექსტისთვის */
     margin: 0;
-    transition: 0.3s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
+    transition: 0.3s;                  /* ყველა ცვლილების (მაგ: ფერის) რბილი გადასვლა */
+    display: flex;                     /* Flexbox-ის გააქტიურება კონტენტის განსალაგებლად */
+    flex-direction: column;            /* ელემენტების ვერტიკალური განლაგება */
+    align-items: center;               /* ელემენტების ჰორიზონტალური დაცენტვრა */
+    min-height: 100vh;                 /* გვერდის სიმაღლე მინიმუმ ეკრანის სიმაღლის ტოლია */
 }
 
-/* 🌙 Dark Mode */
+/* 🌙 Dark Mode - როდესაც JavaScript დაამატებს .dark-mode კლასს */
 body.dark-mode {
     background-color: var(--bg-dark);
     color: var(--text-dark);
 }
 
-/* 🛰️ Navbar */
+/* 🛰️ Navbar - ზედა მენიუს სტილი */
 .navbar {
     width: 100%;
     padding: 15px 50px;
     background: var(--card-light);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05); /* ნაზი ჩრდილი სიღრმის ეფექტისთვის */
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
+    justify-content: space-between;    /* ლოგო და ღილაკი განლაგებულია კიდეებში */
+    align-items: center;               /* ვერტიკალური გასწორება ცენტრში */
+    position: fixed;                   /* მენიუ რჩება ეკრანის ზედა ნაწილში სქროლისას */
     top: 0;
-    box-sizing: border-box;
-    z-index: 100;
+    box-sizing: border-box;            /* padding-ის ჩათვლა ელემენტის მთლიან ზომაში */
+    z-index: 100;                      /* უზრუნველყოფს, რომ მენიუ სხვა ელემენტების ზემოთ იყოს */
 }
 
+/* მენიუს ფერი მუქ რეჟიმში */
 body.dark-mode .navbar {
     background: var(--card-dark);
     box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
-.nav-logo { font-weight: 800; font-size: 20px; color: var(--primary); }
+.nav-logo { 
+    font-weight: 800; 
+    font-size: 20px; 
+    color: var(--primary); 
+}
 
-/* 🃏 Dashboard Card */
+/* 🃏 Dashboard Card - მომხმარებლის ინფორმაციის ბლოკი */
 .dashboard-container {
-    margin-top: 120px;
+    margin-top: 120px;                 /* ადგილი Navbar-ის ქვეშ გამოსაჩენად */
     width: 90%;
     max-width: 500px;
 }
@@ -59,53 +67,61 @@ body.dark-mode .navbar {
 .profile-card {
     background: var(--card-light);
     padding: 40px;
-    border-radius: 20px;
+    border-radius: 20px;               /* მომრგვალებული კუთხეები (თანამედროვე UI) */
     box-shadow: 0 20px 40px rgba(0,0,0,0.05);
     text-align: center;
-    position: relative;
-    overflow: hidden;
+    position: relative;                /* საჭიროა ::before ელემენტის პოზიციონირებისთვის */
+    overflow: hidden;                  /* შიდა ელემენტები არ გასცდნენ მომრგვალებულ კუთხეებს */
 }
 
 body.dark-mode .profile-card {
     background: var(--card-dark);
 }
 
-/* დეკორატიული ელემენტი ბარათზე */
+/* დეკორატიული ფერადი ხაზი ბარათის თავზე */
 .profile-card::before {
-    content: '';
+    content: '';                       /* აუცილებელია ფსევდო-ელემენტისთვის */
     position: absolute;
     top: 0; left: 0; width: 100%; height: 5px;
-    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    background: linear-gradient(90deg, var(--primary), var(--secondary)); /* ჰორიზონტალური გრადიენტი */
 }
 
+/* მომხმარებლის ავატარის წრე */
 .avatar-circle {
     width: 80px; height: 80px;
     background: linear-gradient(135deg, var(--primary), var(--secondary));
-    border-radius: 50%;
-    margin: 0 auto 20px;
+    border-radius: 50%;                /* წრიული ფორმა */
+    margin: 0 auto 20px;               /* ჰორიზონტალური ცენტრირება */
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 30px; color: white; font-weight: bold;
+    justify-content: center;           /* შიდა ასოს (Initial) დაცენტვრა */
+    font-size: 30px; 
+    color: white; 
+    font-weight: bold;
 }
 
 h1 { margin: 10px 0; font-size: 24px; }
 .email-text { color: #888; margin-bottom: 30px; font-size: 14px; }
 
-/* 🔘 Buttons */
+/* 🔘 Buttons - გამოსვლის ღილაკის სტილი */
 .btn-logout {
-    background: #ff4757;
+    background: #ff4757;               /* წითელი ფერი (Danger action) */
     color: white;
     border: none;
     padding: 12px 25px;
     border-radius: 10px;
     font-weight: 600;
-    cursor: pointer;
+    cursor: pointer;                   /* მაუსის მიტანისას საჩვენებელი თითის გამოჩენა */
     transition: 0.3s;
 }
 
-.btn-logout:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3); }
+/* ღილაკზე მაუსის მიტანის ეფექტი */
+.btn-logout:hover { 
+    transform: translateY(-2px);       /* მცირე ამოწევა ზემოთ */
+    box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3); /* ჩრდილის გაძლიერება */
+}
 
+/* თემის გადამრთველი ღილაკი (პატარა ზომის) */
 .theme-toggle {
     background: #eee;
     border: none;
@@ -115,4 +131,7 @@ h1 { margin: 10px 0; font-size: 24px; }
     font-size: 14px;
 }
 
-body.dark-mode .theme-toggle { background: #333; color: white; }
+body.dark-mode .theme-toggle { 
+    background: #333; 
+    color: white; 
+}

@@ -1,13 +1,21 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); // 1. mongoose ბიბლიოთეკის შემოტანა, რომელიც გამოიყენება MongoDB-თან სამუშაოდ
 
+// 2. ასინქრონული ფუნქციის შექმნა ბაზასთან კავშირის დასამყარებლად
 const connectDB = async () => {
     try {
+        // ბაზასთან დაკავშირება process.env.MONGO_URI ცვლადის გამოყენებით
+        // MONGO_URI ინახება .env ფაილში უსაფრთხოების მიზნით (საიდუმლო ლინკი)
         await mongoose.connect(process.env.MONGO_URI);
+       // თუ კავშირი წარმატებით დამყარდა, გამოგვაქვს შეტყობინება კონსოლში
         console.log('MongoDB წარმატებით დაუკავშირდა!');
+
+        // თუ კავშირის დროს მოხდა შეცდომა 
     } catch (err) {
         console.error('ბაზასთან კავშირის შეცდომა:', err.message);
+        // process.exit(1) ნიშნავს, რომ თუ ბაზას ვერ დავუკავშირდით, სერვერი ავტომატურად გაითიშოს
+        // რადგან აპლიკაცია ბაზის გარეშე ვერ იმუშავებს
         process.exit(1);
     }
 };
-
+// 3. ფუნქციის ექსპორტი, რომ სერვერის მთავარ ფაილში (server.js) შევძლოთ მისი გამოძახება
 module.exports = connectDB;
